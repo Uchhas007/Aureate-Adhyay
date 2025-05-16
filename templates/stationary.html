@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<style>
+    .product-style img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .product-style img:hover {
+        transform: scale(1.05);
+    }
+
+    .product-item {
+        margin-bottom: 30px;
+    }
+
+    .product-style {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .wishlist-icon {
+        
+        top: 1px;
+        right: 1px;
+        color: burlywood;
+        font-size: 20px;
+        z-index: 10;
+        text-decoration: none;
+        padding: 0px;
+        transition: background 0.3s ease;
+    }
+    
+    .wishlist-icon:hover {
+        color: black;
+    }
+
+    .item-price {
+        font-size: 0.9rem;
+        color: #555;
+    }
+    select.form-select {
+        padding: 4px 8px;
+        font-size: 14px;
+        border-radius: 5px;
+    }
+</style>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert" id="flash-message-{{ loop.index }}">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<script>
+  // Auto-dismiss flash messages after 3 seconds (3000 ms)
+  setTimeout(function () {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function (alert) {
+      // Bootstrap 5 fade-out effect
+      alert.classList.remove('show');
+      alert.classList.add('fade');
+      setTimeout(() => alert.remove(), 500); // fully remove after fade
+    });
+  }, 3000);
+</script>
+
+
+<section id="featured-books" class="py-5 my-5">
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <form method="get" class="filter-form">
+                    <label for="sort">Sort by Price:</label>
+                    <select name="sort" onchange="this.form.submit()">
+                        <option value="">Select</option>
+                        <option value="asc" {% if selected_sort == 'asc' %}selected{% endif %}>Low to High</option>
+                        <option value="desc" {% if selected_sort == 'desc' %}selected{% endif %}>High to Low</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+        
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="section-header text-center">
+                    <div class="title">
+                        <span>Some quality items</span>
+                    </div>
+                    <h2 class="section-title">Stationaries</h2>
+                </div>
+
+                <div class="product-list" data-aos="fade-up">
+                    <div class="row">
+                        {% for item in st %}
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+                            <div class="product-item">
+                                <figure class="product-style">
+                                    <!-- Heart icon for wishlist -->
+                                    <a href="/add_to_wishlist/stationary/{{ item.sno }}" class="wishlist-icon" title="Add to Wishlist">
+                                        <i class="fas fa-heart"></i> Add to wishlist
+                                    </a>
+
+                                    <img src="{{ url_for('static', filename=item.img_file) }}" alt="{{ item.name }}" class="img-fluid">
+                                    
+                                    <a href="/add_to_cart/stationary/{{ item.sno }}">
+                                        <button type="button" class="add-to-cart" data-product-tile="add-to-cart">Add to Cart</button>
+                                    </a>
+                                </figure>
+                                <figcaption>
+                                    <h3>{{ item.name }}</h3>
+                                    <div class="item-price">Tk {{ item.price }}</div>
+                                </figcaption>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

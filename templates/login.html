@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Light Coffee Theme</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --light-coffee: #c5a992;
+        --brown: #6f4e37;
+        --black: #000000;
+        --white: #ffffff;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background-color: var(--light-coffee);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .login-container {
+        background-color: var(--white);
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        width: 350px;
+        text-align: center;
+      }
+
+      .login-container h2 {
+        color: var(--brown);
+        margin-bottom: 24px;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--brown);
+        font-weight: 500;
+      }
+
+      input[type="email"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--light-coffee);
+        border-radius: 8px;
+        outline: none;
+        background-color: #fdf9f6;
+      }
+
+      .login-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: var(--brown);
+        color: var(--white);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .login-btn:hover {
+        background-color: #5a3f2c;
+      }
+
+      .flash-messages {
+        margin-bottom: 20px;
+        color: red;
+        font-size: 14px;
+      }
+
+      .new-link {
+        display: block;
+        margin-top: 15px;
+        color: var(--brown);
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      .new-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>Login</h2>
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ category }} alert-dismissible fade show"
+        role="alert"
+        id="flash-message-{{ loop.index }}"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <script>
+        // Auto-dismiss flash messages after 3 seconds (3000 ms)
+        setTimeout(function () {
+          const alerts = document.querySelectorAll(".alert");
+          alerts.forEach(function (alert) {
+            // Bootstrap 5 fade-out effect
+            alert.classList.remove("show");
+            alert.classList.add("fade");
+            setTimeout(() => alert.remove(), 500); // fully remove after fade
+          });
+        }, 3000);
+      </script>
+
+      <form id="loginForm" name="loginForm" action="/login" method="POST">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email Address"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="pass"
+            placeholder="Password"
+            required
+          />
+        </div>
+        <button type="submit" class="login-btn">Login</button>
+        <a href="/signup" class="new-link">New to BookSaw?</a>
+        <a href="/forgotpass" class="new-link">Forgot Password?</a>
+      </form>
+    </div>
+  </body>
+</html>

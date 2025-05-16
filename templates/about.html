@@ -1,0 +1,182 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About Us - RUDZ Book Store</title>
+  <style>
+    :root {
+      --coffee: #C5A992;
+      --brown: #6E4B3A;
+      --white: #FFFFFF;
+      --black: #1A1A1A;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: var(--coffee);
+      color: var(--black);
+    }
+
+    .about-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .about-container:hover {
+      transform: translateY(-5px);
+    }
+
+    h1 {
+      color: var(--brown);
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      line-height: 1.6;
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      text-align: center;
+    }
+
+    .team {
+      margin-top: 1.5rem;
+    }
+
+    .team h2 {
+      color: var(--brown);
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .team-members {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .member {
+      flex: 1 1 200px;
+      background: var(--coffee);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .member:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .member img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+    }
+
+    .member h3 {
+      color: var(--brown);
+      font-size: 1rem;
+      margin: 0.5rem 0;
+    }
+
+    .member p {
+      font-size: 0.9rem;
+      color: var(--black);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: var(--brown);
+      color: var(--white);
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+
+    @media (max-width: 600px) {
+      .about-container {
+        margin: 1rem;
+        padding: 1rem;
+      }
+      .team-members {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="about-container">
+    <h1>About RUDZ Book Store</h1>
+    <p>This is the CSE370 Project for Group #6. Our Project was to create a Bookstore. These bookstore provides all (almost) those facilities that you'll get from a traditional bookstore or Library</p>
+    <p>We crafted these beautiful digital experiences of a bookstore with quality and creativity. From websites to apps, we deliver with precision.</p>
+    <p>Our mission is to spark growth through innovative solutions and lasting partnerships.</p>
+
+    <div class="team">
+      <h2>Our Crew</h2>
+      <div class="team-members">
+        <div class="member">
+          <!-- <img src="https://via.placeholder.com/60" alt="Uchhas Saha"> -->
+          <h3>Uchhas Saha</h3>
+          <p>22201336</p>
+        </div>
+        <div class="member">
+          <!-- <img src="https://via.placeholder.com/60" alt="Debasmita Oitijja"> -->
+          <h3>Debasmita Paul</h3>
+          <p>22299070</p>
+        </div>
+        <div class="member">
+          <!-- <img src="https://via.placeholder.com/60" alt="Armor Ramsey"> -->
+          <h3>Mahmud Al Fuad Rubai</h3>
+          <p>22201329</p>
+        </div>
+        <div class="member">
+          <!-- <img src="https://via.placeholder.com/60" alt="Armor Ramsey"> -->
+          <h3>Zawad</h3>
+          <p>ID Goes here</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 RUDZ Book Store. All rights reserved.
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const members = document.querySelectorAll('.member');
+      members.forEach(member => {
+        member.addEventListener('click', () => {
+          member.classList.toggle('active');
+          if (member.classList.contains('active')) {
+            member.style.background = 'var(--brown)';
+            member.querySelector('p').style.color = 'var(--white)';
+          } else {
+            member.style.background = 'var(--coffee)';
+            member.querySelector('p').style.color = 'var(--black)';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+{% endblock %}

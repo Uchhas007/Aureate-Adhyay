@@ -1,0 +1,199 @@
+{% extends "layout.html" %} {% block body %} {% with messages =
+get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,
+message in messages %}
+<div
+  class="alert alert-{{ category }} alert-dismissible fade show"
+  role="alert"
+  id="flash-message-{{ loop.index }}"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+<script>
+  // Auto-dismiss flash messages after 3 seconds (3000 ms)
+  setTimeout(function () {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach(function (alert) {
+      // Bootstrap 5 fade-out effect
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 500); // fully remove after fade
+    });
+  }, 3000);
+</script>
+
+<section id="author-biography" class="py-5 my-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-header align-center">
+          <div class="title">
+            <span>Author Biography</span>
+          </div>
+          <h1 class="section-title">{{ author.name }}</h1>
+        </div>
+
+        <div class="author-content" data-aos="fade-up">
+          <div class="row">
+            <div class="col-md-4">
+              <figure class="author-image">
+                <img
+                  src="{{ url_for('static', filename=author.image) }}"
+                  alt="{{ author.name }}"
+                  class="img-fluid"
+                />
+              </figure>
+            </div>
+            <div class="col-md-8">
+              <div class="author-bio">
+                <p>{{ author.bio }}</p>
+                <p><strong>Born:</strong> {{ author.dob }}</p>
+                <p><strong>Genres:</strong> {{ author.genres }}</p>
+                <p><strong>Awards:</strong> {{ author.awards }}</p>
+                <a href="{{ author.link }}" class="author-link" target="_blank"
+                  >Visit {{ author.name }}’s Legacy</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="related-links mt-5">
+          <h3 class="related-title">Explore More</h3>
+          <ul class="related-list">
+            {% for link in related_links %}
+            <li>
+              <a href="{{ link.url }}" class="related-link">{{ link.title }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Smooth scroll for related links
+    const links = document.querySelectorAll(".related-link");
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href");
+        if (href.startsWith("#")) {
+          e.preventDefault();
+          document.querySelector(href).scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  :root {
+    --accent-color: #c5a992;
+    --dark-color: #2f2f2f;
+    --light-color: #f3f2ec;
+    --body-text-color: #757575;
+    --goldish-brown: #74642f;
+  }
+
+  .author-biography {
+    background: var(--light-color);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    color: var(--goldish-brown);
+  }
+
+  .title span {
+    font-size: 1rem;
+    color: var(--body-text-color);
+    text-transform: uppercase;
+  }
+
+  .author-image img {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 2px solid var(--accent-color);
+  }
+
+  .author-bio {
+    font-size: 1.1rem;
+    color: var(--body-text-color);
+  }
+
+  .author-bio p {
+    margin-bottom: 1rem;
+  }
+
+  .author-link {
+    display: inline-block;
+    background: var(--accent-color);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+
+  .author-link:hover {
+    background: var(--goldish-brown);
+  }
+
+  .related-links {
+    text-align: center;
+  }
+
+  .related-title {
+    font-size: 1.5rem;
+    color: var(--goldish-brown);
+    margin-bottom: 1rem;
+  }
+
+  .related-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .related-list li {
+    margin: 0.5rem 0;
+  }
+
+  .related-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 1rem;
+  }
+
+  .related-link:hover {
+    color: var(--goldish-brown);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .author-content .row {
+      flex-direction: column;
+    }
+
+    .author-image {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+  }
+</style>
+
+{% endblock %}

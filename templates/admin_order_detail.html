@@ -1,0 +1,362 @@
+{% extends "layout.html" %} {% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Order Detail</title>
+    <style>
+      .admin-container {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .admin-header h1 {
+        margin: 0;
+      }
+
+      .admin-header a {
+        background-color: #6e4b3a;
+        color: white;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        border-radius: 4px;
+      }
+
+      .order-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .order-id {
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+
+      .order-date {
+        color: #718096;
+      }
+
+      .order-section {
+        margin-bottom: 1.5rem;
+      }
+
+      .order-section h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        font-size: 1.125rem;
+      }
+
+      .order-status {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-weight: 500;
+        font-size: 0.875rem;
+      }
+
+      .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+
+      .status-processing {
+        background-color: #cce5ff;
+        color: #004085;
+      }
+
+      .status-shipped {
+        background-color: #d4edda;
+        color: #155724;
+      }
+
+      .status-delivered {
+        background-color: #d1e7dd;
+        color: #0f5132;
+      }
+
+      .status-cancelled {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+
+      .customer-info,
+      .shipping-info,
+      .payment-info {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.25rem;
+      }
+
+      .customer-info p,
+      .shipping-info p,
+      .payment-info p {
+        margin: 0.5rem 0;
+      }
+
+      .order-items-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .order-items-table th,
+      .order-items-table td {
+        padding: 0.75rem;
+        border: 1px solid #e2e8f0;
+        text-align: left;
+      }
+
+      .order-items-table th {
+        background-color: #f7fafc;
+        font-weight: 600;
+      }
+
+      .order-summary {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1rem;
+      }
+
+      .order-total {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.25rem;
+        width: 300px;
+      }
+
+      .total-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .total-row.final {
+        font-weight: bold;
+        border-top: 1px solid #e2e8f0;
+        padding-top: 0.5rem;
+        margin-top: 0.5rem;
+      }
+
+      .status-form {
+        margin-top: 2rem;
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+      }
+
+      .status-form h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+
+      .form-group select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #cbd5e0;
+        border-radius: 0.25rem;
+      }
+
+      .submit-btn {
+        background-color: #6e4b3a;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+      }
+
+      .submit-btn:hover {
+        background-color: #5a3d2f;
+      }
+
+      .product-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1>Order Details</h1>
+        <a href="/admin/orders">← Back to Orders</a>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ category }} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <div class="order-card">
+        <div class="order-header">
+          <div>
+            <div class="order-id">Order #{{ order.id }}</div>
+            <div class="order-date">{{ order.order_date.strftime('%B %d, %Y') }}</div>
+          </div>
+          <div class="order-status status-{{ order.status.lower() }}">
+            {{ order.status }}
+          </div>
+        </div>
+
+        <div class="order-section">
+          <h3>Customer Information</h3>
+          <div class="customer-info">
+            <p><strong>Email:</strong> {{ order.user_email }}</p>
+          </div>
+        </div>
+
+        <div class="order-section">
+          <h3>Shipping Address</h3>
+          <div class="shipping-info">
+            <p>{{ order.shipping_address }}</p>
+          </div>
+        </div>
+
+        <div class="order-section">
+          <h3>Payment Information</h3>
+          <div class="payment-info">
+            <p><strong>Payment Method:</strong> {{ order.payment.payment_method }}</p>
+            <p><strong>Transaction ID:</strong> {{ order.payment.transaction_id }}</p>
+            <p><strong>Status:</strong> {{ order.payment.status }}</p>
+          </div>
+        </div>
+
+        <div class="order-section">
+          <h3>Order Items</h3>
+          <table class="order-items-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+              <tr>
+                <td>
+                  {% if item.type == 'book' %}
+                  <img
+                    src="{{ url_for('static', filename=item.item.image) }}"
+                    alt="{{ item.item.name }}"
+                    class="product-image"
+                  />
+                  {% else %}
+                  <img
+                    src="{{ url_for('static', filename=item.item.img_file) }}"
+                    alt="{{ item.item.name }}"
+                    class="product-image"
+                  />
+                  {% endif %}
+                </td>
+                <td>
+                  {{ item.item.name }}
+                  {% if item.type == 'book' %}
+                  <br />
+                  <small>Author: {{ item.item.author }}</small>
+                  {% endif %}
+                </td>
+                <td>BDT {{ item.price / item.quantity }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>BDT {{ item.price }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <div class="order-summary">
+            <div class="order-total">
+              <div class="total-row">
+                <span>Subtotal:</span>
+                <span>BDT {{ order.total_amount }}</span>
+              </div>
+              <div class="total-row">
+                <span>Shipping:</span>
+                <span>Free</span>
+              </div>
+              <div class="total-row final">
+                <span>Total:</span>
+                <span>BDT {{ order.total_amount }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-form">
+        <h3>Update Order Status</h3>
+        <form action="/admin/order/{{ order.id }}/update" method="post">
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select name="status" id="status">
+              <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>
+                Pending
+              </option>
+              <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>
+                Processing
+              </option>
+              <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>
+                Shipped
+              </option>
+              <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>
+                Delivered
+              </option>
+              <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>
+                Cancelled
+              </option>
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Update Status</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+
+{% endblock %} 

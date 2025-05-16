@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up to BookSaw</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #f3e5ab, #c8ad7f);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .signup-container {
+      background-color: #fffaf4;
+      padding: 3rem 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(100, 70, 30, 0.15);
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: #5e3c2b;
+      margin-bottom: 1rem;
+      font-size: 2rem;
+    }
+
+    p {
+      color: #7a5c43;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #d2b48c;
+      border-radius: 12px;
+      background-color: #fefcf8;
+      font-size: 1rem;
+      transition: 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #a9745a;
+      box-shadow: 0 0 5px #a9745a;
+    }
+
+    button {
+      width: 100%;
+      background-color: #8b5e3c;
+      color: white;
+      border: none;
+      padding: 1rem;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #704830;
+    }
+
+    .footer-text {
+      margin-top: 1rem;
+      color: #7a5c43;
+    }
+
+    .footer-text a {
+      color: #5e3c2b;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="signup-container">
+    <h2>Join BookSaw</h2>
+    <p>Sign up to begin your literary journey.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} mt-3" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form id="signupForm" name="signupForm" action="/signup" method="POST">
+        <input type="text" id="name" name="name" placeholder="Full Name" required />
+        <input type="email" id="email" name="email" placeholder="Email Address" required />
+        <input type="password" id="password" name="pass" placeholder="Password" required />
+        <button type="submit">Create Account</button>
+      </form>      
+
+    <p class="footer-text">Already have an account? <a href="/login">Log in</a></p>
+  </div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", function() {
+    });
+  </script>
+
+</body>
+</html>

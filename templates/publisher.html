@@ -1,0 +1,104 @@
+{% extends "layout.html" %} {% block body %} {% with messages =
+get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,
+message in messages %}
+<div
+  class="alert alert-{{ category }} alert-dismissible fade show"
+  role="alert"
+  id="flash-message-{{ loop.index }}"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+<script>
+  // Auto-dismiss flash messages after 3 seconds (3000 ms)
+  setTimeout(function () {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach(function (alert) {
+      // Bootstrap 5 fade-out effect
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 500); // fully remove after fade
+    });
+  }, 3000);
+</script>
+
+<section id="author" class="py-5 my-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-header align-center">
+          <div class="title">
+            <span>Publisher</span>
+          </div>
+          <h2 class="section-title">Our Partnered Publishers</h2>
+        </div>
+
+        <div class="product-list" data-aos="fade-up">
+          <div class="row">
+            {% if pub %} {% for p in pub %}
+            <div class="col-md-3">
+              <div class="product-item">
+                <figure class="product-style">
+                  {% if p.logo.startswith('http') %}
+                  <img
+                    src="{{ p.logo }}"
+                    alt="{{ p.name }}"
+                    class="product-item"
+                  />
+                  {% else %}
+                  <img
+                    src="{{ url_for('static', filename=p.logo) }}"
+                    alt="{{ p.name }}"
+                    class="product-item"
+                  />
+                  {% endif %}
+                  <button
+                    type="button"
+                    class="read-more"
+                    data-publisher-id="{{ p.sno }}"
+                  >
+                    About {{ p.name }}
+                  </button>
+                </figure>
+                <figcaption>
+                  <h3>{{ p.name }}</h3>
+                  <span>{{ p.type }}</span>
+                </figcaption>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <div class="col-md-12">
+              <p>No publishers available.</p>
+            </div>
+            {% endif %}
+          </div>
+          <!--ft-books-slider-->
+        </div>
+        <!--grid-->
+      </div>
+      <!--inner-content-->
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Read More button functionality
+    const readMoreButtons = document.querySelectorAll(".read-more");
+    readMoreButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const publisherId = button.getAttribute("data-publisher-id");
+        window.location.href = `/publisher/${publisherId}`;
+      });
+    });
+  });
+</script>
+
+{% endblock %}

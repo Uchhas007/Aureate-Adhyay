@@ -1,0 +1,275 @@
+{% extends "layout.html" %} {% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout</title>
+    <style>
+      :root {
+        --coffee: #c5a992;
+        --brown: #6e4b3a;
+        --white: #ffffff;
+        --black: #1a1a1a;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: var(--coffee);
+        margin: 0;
+        padding: 0;
+      }
+
+      .checkout-container {
+        display: flex;
+        gap: 2rem;
+        max-width: 1100px;
+        margin: 2rem auto;
+      }
+
+      .checkout-form,
+      .order-summary {
+        background-color: var(--white);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .checkout-form {
+        flex: 2;
+      }
+
+      .order-summary {
+        flex: 1;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 1rem;
+      }
+
+      textarea {
+        height: 100px;
+        resize: vertical;
+      }
+
+      .submit-btn {
+        background-color: var(--brown);
+        color: var(--white);
+        border: none;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        margin-top: 1rem;
+      }
+
+      .submit-btn:hover {
+        background-color: #543a28;
+      }
+
+      .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #eee;
+      }
+
+      .summary-item:last-child {
+        border-bottom: none;
+      }
+
+      .summary-item-title {
+        font-weight: bold;
+      }
+
+      .summary-item-info {
+        color: #666;
+      }
+
+      .total-row {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid #ddd;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
+      .order-items {
+        margin-top: 2rem;
+        border-top: 1px solid #ddd;
+        padding-top: 1rem;
+      }
+
+      .order-item {
+        display: flex;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eee;
+      }
+
+      .order-item:last-child {
+        border-bottom: none;
+      }
+
+      .order-item img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-right: 1rem;
+      }
+
+      .order-item-details {
+        flex: 1;
+      }
+
+      .order-item-price {
+        font-weight: bold;
+      }
+
+      .payment-methods {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+      }
+
+      .payment-method {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.75rem;
+      }
+
+      .payment-method input {
+        width: auto;
+        margin-right: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .checkout-container {
+          flex-direction: column-reverse;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div
+      class="alert alert-{{ category }} alert-dismissible fade show"
+      role="alert"
+      id="flash-message-{{ loop.index }}"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %} {% endwith %}
+
+    <div class="checkout-container">
+      <div class="checkout-form">
+        <h2>Checkout</h2>
+        <form method="POST" action="/checkout">
+          <div class="form-group">
+            <label for="shipping_address">Shipping Address</label>
+            <textarea
+              id="shipping_address"
+              name="shipping_address"
+              required
+              placeholder="Enter your full shipping address"
+            ></textarea>
+          </div>
+
+          <div class="form-group payment-methods">
+            <label>Payment Method</label>
+            <div class="payment-method">
+              <input
+                type="radio"
+                id="credit_card"
+                name="payment_method"
+                value="credit_card"
+                required
+                checked
+              />
+              <label for="credit_card">Credit Card</label>
+            </div>
+            <div class="payment-method">
+              <input
+                type="radio"
+                id="paypal"
+                name="payment_method"
+                value="paypal"
+              />
+              <label for="paypal">PayPal</label>
+            </div>
+            <div class="payment-method">
+              <input type="radio" id="cod" name="payment_method" value="cod" />
+              <label for="cod">Cash on Delivery</label>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">Place Order</button>
+        </form>
+      </div>
+
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-item">
+          <span>Items ({{ items|length }}):</span>
+          <span>BDT {{ total }}</span>
+        </div>
+        <div class="summary-item">
+          <span>Shipping:</span>
+          <span>Free</span>
+        </div>
+        <div class="summary-item total-row">
+          <span>Total:</span>
+          <span>BDT {{ total }}</span>
+        </div>
+
+        <div class="order-items">
+          <h4>Items in Your Order</h4>
+          {% for item in items %}
+          <div class="order-item">
+            {% if item.type == 'book' %}
+            <img src="{{ url_for('static', filename=item.item.image) }}" alt="{{ item.item.name }}" />
+            {% else %}
+            <img src="{{ url_for('static', filename=item.item.img_file) }}" alt="{{ item.item.name }}" />
+            {% endif %}
+            <div class="order-item-details">
+              <div>{{ item.item.name }}</div>
+              <div>Quantity: {{ item.quantity }}</div>
+            </div>
+            <div class="order-item-price">₹{{ item.price }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+{% endblock %} 

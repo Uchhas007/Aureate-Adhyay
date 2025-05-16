@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore Admin Panel</title>
+    <style>
+        /* General Styling */
+        body {
+            background-color: #0D47A1; /* Solid Dark Blue */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Content Container */
+        .container {
+            background-color: #FFFFFF; /* White */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        /* Heading */
+        h1 {
+            color: #0D47A1; /* Solid Dark Blue */
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Welcome Text */
+        p {
+            color: #333333; /* Dark Gray for readability */
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background-color: #0D47A1; /* Solid Dark Blue */
+            color: #FFFFFF; /* White */
+            padding: 12px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #1565C0; /* Slightly lighter dark blue for hover */
+        }
+
+        /* Log Out Button */
+        .logout-btn {
+            background-color: #B0BEC5; /* Light gray for contrast */
+            color: #0D47A1; /* Solid Dark Blue */
+        }
+
+        .logout-btn:hover {
+            background-color: #CFD8DC; /* Lighter gray for hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Bookstore Admin Panel</h1>
+        <p>Manage your bookstore's inventory with ease. Select an option below to view or edit Books, Authors, Publishers, Stationaries or Feedbacks.</p>
+        {% block content %}
+        <a href="/admin/books" class="btn">Books</a>
+        <a href="/admin/authors" class="btn">Authors</a>
+        <a href="/admin/publishers" class="btn">Publishers</a>
+        <a href="/admin/stationaries" class="btn">Stationaries</a>
+        <a href="/admin/contacts" class="btn">Feedbacks</a>
+        <a href="/admin/orders" class="btn" style="background-color: #28a745;">Manage Orders</a>
+        <a href="/logout" class="btn logout-btn" style="background-color: #dc3545; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px;">Log Out</a>
+        {% endblock %}
+    </div>
+    <!-- JavaScript to Prevent Form Resubmission Prompt -->
+    <script>
+        // Clear form history to prevent "Confirm Form Resubmission" on back navigation
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+{% extends "layout.html" %} {% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart Page</title>
+    <style>
+      :root {
+        --coffee: #c5a992;
+        --brown: #6e4b3a;
+        --white: #ffffff;
+        --black: #1a1a1a;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background-color: var(--coffee);
+        margin: 0;
+        padding: 0;
+      }
+
+      .cart-page {
+        background-color: var(--white);
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: 2rem auto;
+      }
+
+      .cart-items {
+        margin-bottom: 2rem;
+      }
+
+      .cart-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-bottom: 1px solid var(--coffee);
+      }
+
+      .cart-item img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin-right: 1rem;
+      }
+
+      .item-details {
+        flex: 1;
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+      }
+
+      .quantity-controls button {
+        background-color: var(--brown);
+        color: var(--white);
+        border: none;
+        padding: 0.5rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .quantity-controls button:hover {
+        background-color: #543a28;
+      }
+
+      .quantity-input {
+        width: 50px;
+        text-align: center;
+        margin: 0 0.5rem;
+        -moz-appearance: textfield;
+      }
+
+      .quantity-input::-webkit-inner-spin-button,
+      .quantity-input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      .remove-btn {
+        background-color: var(--brown);
+        color: var(--white);
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .remove-btn:hover {
+        background-color: #543a28;
+      }
+
+      .cart-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2rem;
+      }
+
+      .cart-summary p {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      #total-cost {
+        font-weight: bold;
+      }
+
+      #checkout-btn {
+        background-color: var(--brown);
+        color: var(--white);
+        border: none;
+        padding: 1rem 2rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      #checkout-btn:hover {
+        background-color: #543a28;
+      }
+
+      .empty-cart {
+        text-align: center;
+        padding: 2rem;
+      }
+
+      .empty-cart a {
+        display: inline-block;
+        background-color: var(--brown);
+        color: var(--white);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        margin-top: 1rem;
+        border-radius: 4px;
+      }
+
+      @media (max-width: 600px) {
+        .cart-item {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .cart-item img {
+          margin-bottom: 1rem;
+        }
+        .quantity-controls {
+          margin-top: 1rem;
+        }
+        .cart-page {
+          margin: 1rem;
+          padding: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div
+      class="alert alert-{{ category }} alert-dismissible fade show"
+      role="alert"
+      id="flash-message-{{ loop.index }}"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %} {% endif %} {% endwith %}
+
+    <script>
+      // Auto-dismiss flash messages after 3 seconds (3000 ms)
+      setTimeout(function () {
+        const alerts = document.querySelectorAll(".alert");
+        alerts.forEach(function (alert) {
+          // Bootstrap 5 fade-out effect
+          alert.classList.remove("show");
+          alert.classList.add("fade");
+          setTimeout(() => alert.remove(), 500); // fully remove after fade
+        });
+      }, 3000);
+    </script>
+
+    <div class="cart-page">
+      <h2>Your Cart</h2>
+      
+      {% if items|length == 0 %}
+      <div class="empty-cart">
+        <h3>Your cart is empty</h3>
+        <p>Looks like you haven't added any items to your cart yet.</p>
+        <a href="/featured">Continue Shopping</a>
+      </div>
+      {% else %}
+      
+      <div class="cart-items">
+        {% for cart_item in items %}
+        <div class="cart-item" data-id="{{ cart_item.cart_id }}">
+          {% if cart_item.type == 'book' %}
+          <img src="{{ url_for('static', filename=cart_item.item.image) }}" alt="{{ cart_item.item.name }}" />
+          {% else %}
+          <img src="{{ url_for('static', filename=cart_item.item.img_file) }}" alt="{{ cart_item.item.name }}" />
+          {% endif %}
+          <div class="item-details">
+            <h3>{{ cart_item.item.name }}</h3>
+            <p>
+              {% if cart_item.type == 'book' %}
+              Author: {{ cart_item.item.author }}<br>
+              {% endif %}
+              Price: <span class="item-price">BDT {{ cart_item.item.price }}</span>
+            </p>
+          </div>
+          <div class="quantity-controls">
+            <a href="/update_cart_quantity/{{ cart_item.cart_id }}/{{ cart_item.quantity - 1 }}" class="minus-btn">-</a>
+            <input type="number" class="quantity-input" value="{{ cart_item.quantity }}" min="1" readonly />
+            <a href="/update_cart_quantity/{{ cart_item.cart_id }}/{{ cart_item.quantity + 1 }}" class="plus-btn">+</a>
+          </div>
+          <a href="/remove_from_cart/{{ cart_item.cart_id }}" class="remove-btn">Remove</a>
+        </div>
+        {% endfor %}
+      </div>
+      
+      <div class="cart-summary">
+        <p>Total: <span id="total-cost">BDT {{ total }}</span></p>
+        <a href="/checkout" id="checkout-btn">Checkout</a>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>
+
+{% endblock %}

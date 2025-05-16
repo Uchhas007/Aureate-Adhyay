@@ -1,0 +1,42 @@
+{% extends "layout.html" %} {% block body %} {% with messages =
+get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,
+message in messages %}
+<div
+  class="alert alert-{{ category }} alert-dismissible fade show"
+  role="alert"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+<script>
+  setTimeout(() => {
+    document.querySelectorAll(".alert").forEach((alert) => {
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 500);
+    });
+  }, 3000);
+</script>
+
+<section class="py-5 my-5">
+  <div class="container" action="/cngpassword">
+    <h2 class="text-center mb-4">User Info</h2>
+    <div class="card p-4 mx-auto" style="max-width: 500px">
+      <p><strong>Name: </strong> {{ user.name }}</p>
+      <p><strong>Email: </strong> {{ user.email }}</p>
+      <p>
+        <strong>Account created on: </strong> {{ user.date.strftime('%Y-%m-%d')
+        }}
+      </p>
+      <a href="/cngpassword" class="btn btn-primary">Change Password</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

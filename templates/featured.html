@@ -1,0 +1,102 @@
+{% extends "layout.html" %} {% block body %} {% with messages =
+get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,
+message in messages %}
+<div
+  class="alert alert-{{ category }} alert-dismissible fade show"
+  role="alert"
+  id="flash-message-{{ loop.index }}"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+<script>
+  // Auto-dismiss flash messages after 3 seconds (3000 ms)
+  setTimeout(function () {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach(function (alert) {
+      // Bootstrap 5 fade-out effect
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 500); // fully remove after fade
+    });
+  }, 3000);
+</script>
+
+<section id="featured-books" class="py-5 my-5">
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col-md-12">
+          <form method="get" action="{{ url_for('featured') }}" class="filter-form">
+              <label for="sort">Sort by Price:</label>
+              <select name="sort" id="sort" onchange="this.form.submit()">
+                  <option value="">Select</option>
+                  <option value="asc" {{ 'selected' if request.args.get('sort') == 'asc' else '' }}>Low to High</option>
+                  <option value="desc" {{ 'selected' if request.args.get('sort') == 'desc' else '' }}>High to Low</option>
+              </select>
+          </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-header align-center">
+          <div class="title">
+            <span>Some quality items</span>
+          </div>
+          <h2 class="section-title">Featured Books</h2>
+        </div>
+
+        <div class="product-list" data-aos="fade-up">
+          <div class="row">
+            {% if books %} {% for book in books %}
+            <div class="col-md-3 mb-4">
+              <div class="product-item">
+                <a href="{{ url_for('book_detail', book_id=book.sno) }}">
+                  <figure class="product-style">
+                    <a
+                      href="/add_to_wishlist/book/{{ book.sno }}"
+                      class="wishlist-icon"
+                    >
+                      <i class="fas fa-heart"></i> Add to wishlist
+                    </a>
+                    <img
+                      src="{{ url_for('static', filename=book.image) }}"
+                      alt="{{ book.name }}"
+                      class="product-item img-fluid"
+                    />
+                    <button type="button" class="add-to-cart" onclick="window.location.href='/add_to_cart/book/{{ book.sno }}'">
+                      Add to Cart
+                    </button>
+                  </figure>
+                </a>
+                <figcaption>
+                  <h3>{{ book.name }}</h3>
+                  <span>{{ book.author }}</span>
+                  <div class="item-price">Tk {{ book.price }}</div>
+                  <p class="mt-2 text-muted">{{ book.description[:60] }}...</p>
+                  <a
+                    href="{{ url_for('book_detail', book_id=book.sno) }}"
+                    class="btn btn-sm btn-outline-secondary mt-2"
+                    >Read More</a
+                  >
+                </figcaption>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <div class="col-md-12">
+              <p>No featured books available right now.</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

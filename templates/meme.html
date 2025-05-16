@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Philosophy101</title>
+    <style>
+        /* Ensures the page takes up the full height of the screen */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        /* Full-screen background image */
+        .full-screen-image {
+            height: 100%;
+            background-image: url('{{ image_url }}'); /* Replace with the backend variable */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        /* Simple styling for the content */
+        .content {
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Button style */
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: #39ac31;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background-color: #2a7f20;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="full-screen-image">
+        <div class="content">
+            <h1>{{t1}}</h1>
+            <h2>{{t2}}</h2>
+            <h3>{{t3}}</h3>
+            <a href="/" class="btn">Go to Homepage</a>
+        </div>
+    </div>
+
+</body>
+</html>

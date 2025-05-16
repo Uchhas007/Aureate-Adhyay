@@ -1,0 +1,94 @@
+{% extends "layout.html" %} {% block body %} {% with messages =
+get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,
+message in messages %}
+
+<div
+  class="alert alert-{{ category }} alert-dismissible fade show"
+  role="alert"
+  id="flash-message-{{ loop.index }}"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+<script>
+  // Auto-dismiss flash messages after 3 seconds (3000 ms)
+  setTimeout(function () {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach(function (alert) {
+      // Bootstrap 5 fade-out effect
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 500); // fully remove after fade
+    });
+  }, 3000);
+</script>
+
+<section id="billboard">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <button class="prev slick-arrow">
+          <i class="icon icon-arrow-left"></i>
+        </button>
+
+        <div class="main-slider pattern-overlay">
+          <div class="slider-item">
+            <div class="banner-content">
+              <h2 class="banner-title">{{ book1.name }}</h2>
+              <p>{{ book1.description }}</p>
+              <!-- <div class="btn-wrap">
+                <a href="#" class="btn btn-outline-accent btn-accent-arrow"
+                  >Read More<i class="icon icon-ns-arrow-right"></i
+                ></a>
+              </div> -->
+            </div>
+            <!--banner-content-->
+            <img
+              src="{{ url_for('static', filename=book1.image) }}"
+              alt="banner"
+              class="banner-image"
+              width="400"
+              height="500"
+            />
+          </div>
+          <!--slider-item-->
+
+          <div class="slider-item">
+            <div class="banner-content">
+              <h2 class="banner-title">{{ book2.name }}</h2>
+              <p>{{ book2.description }}</p>
+              <!-- <div class="btn-wrap">
+                <a href="#" class="btn btn-outline-accent btn-accent-arrow"
+                  >Read More<i class="icon icon-ns-arrow-right"></i
+                ></a>
+              </div> -->
+            </div>
+            <!--banner-content-->
+            <img
+              src="{{ url_for('static', filename=book2.image) }}"
+              alt="banner"
+              class="banner-image"
+              width="400"
+              height="500"
+            />
+          </div>
+          <!--slider-item-->
+        </div>
+        <!--slider-->
+
+        <button class="next slick-arrow">
+          <i class="icon icon-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

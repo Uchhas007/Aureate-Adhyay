@@ -1,0 +1,145 @@
+{% extends "layout.html" %} {% block body %}
+<style>
+  :root {
+    --coffee: #c5a992;
+    --brown: #6e4b3a;
+    --white: #ffffff;
+    --black: #1a1a1a;
+  }
+
+  body {
+    font-family: "Segoe UI", sans-serif;
+    background-color: var(--coffee);
+  }
+
+  .wishlist-page {
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    margin: 2rem auto;
+  }
+
+  .wishlist-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--coffee);
+  }
+
+  .wishlist-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 1rem;
+    border-radius: 8px;
+  }
+
+  .wishlist-details {
+    flex: 1;
+  }
+
+  .wishlist-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .wishlist-actions button {
+    background-color: var(--brown);
+    color: var(--white);
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    width: 155px;
+  }
+
+  .wishlist-actions button:hover {
+    background-color: #543a28;
+  }
+
+  @media (max-width: 600px) {
+    .wishlist-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .wishlist-item img {
+      margin-bottom: 1rem;
+    }
+
+    .wishlist-actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+</style>
+
+{% with messages = get_flashed_messages(with_categories=true) %} {% if messages
+%} {% for category, message in messages %}
+<div
+  class="alert alert-{{ category }} alert-dismissible fade show"
+  role="alert"
+  id="flash-message-{{ loop.index }}"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+<script>
+  // Auto-dismiss flash messages after 3 seconds (3000 ms)
+  setTimeout(function () {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach(function (alert) {
+      // Bootstrap 5 fade-out effect
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 500); // fully remove after fade
+    });
+  }, 3000);
+</script>
+
+<div class="wishlist-page">
+  <h2>Your Wishlist</h2>
+
+  {% for i in items %}
+  <div class="wishlist-item">
+    {% if i.type == 'book' %}
+    <img
+      src="{{ url_for('static', filename=i.item.image) }}"
+      alt="Book Image"
+    />
+    {% else %}
+    <img
+      src="{{ url_for('static', filename=i.item.img_file) }}"
+      alt="Stationary Image"
+    />
+    {% endif %}
+    <div class="wishlist-details">
+      <h3>{{ i.item.name }}</h3>
+      <p>Price: Tk {{ i.item.price }}</p>
+    </div>
+    <div class="wishlist-actions">
+      <a
+        href="/add_wishlist_to_cart/{{ i.wishlist_id }}"
+        class="move_to_cart_btn"
+        ><button>Move to Cart</button></a
+      >
+      <a href="/remove_from_wishlist/{{ i.wishlist_id }}"
+        ><button class="btn-danger">Remove</button></a
+      >
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

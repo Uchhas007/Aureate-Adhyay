@@ -1,0 +1,91 @@
+{% extends "layout.html" %} {% block body %} {% with messages =
+get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,
+message in messages %}
+<div
+  class="alert alert-{{ category }} alert-dismissible fade show"
+  role="alert"
+  id="flash-message-{{ loop.index }}"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+<script>
+  // Auto-dismiss flash messages after 3 seconds (3000 ms)
+  setTimeout(function () {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach(function (alert) {
+      // Bootstrap 5 fade-out effect
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 500); // fully remove after fade
+    });
+  }, 3000);
+</script>
+
+<section id="publisher-biography" class="py-5 my-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-header align-center">
+          <div class="title">
+            <span>Publisher Details</span>
+          </div>
+          <h1 class="section-title">{{ pd.name }}</h1>
+        </div>
+
+        <div class="publisher-content" data-aos="fade-up">
+          <div class="row">
+            <div class="col-md-4">
+              <figure class="publisher-logo">
+                {% if pd.logo.startswith('http') %}
+                <img
+                  src="{{ pd.logo }}"
+                  alt="{{ pd.name }}"
+                  class="img-fluid"
+                />
+                {% else %}
+                <img
+                  src="{{ url_for('static', filename=pd.logo) }}"
+                  alt="{{ pd.name }}"
+                  class="img-fluid"
+                />
+                {% endif %}
+              </figure>
+            </div>
+            <div class="col-md-8">
+              <div class="publisher-bio">
+                <p>
+                  <strong>Imprints:</strong> {{ pd.iimprints or 'Not specified'
+                  }}
+                </p>
+                <p>
+                  <strong>Member Since:</strong> {{
+                  pd.member_since.strftime('%Y-%m-%d') or 'Not specified' }}
+                </p>
+                <p><strong>Genres:</strong> {{ pd.type or 'Not specified' }}</p>
+                <p>
+                  <strong>Authors:</strong> {{ pd.authors or 'Not specified' }}
+                </p>
+                <p>
+                  <strong>Location:</strong> {{ pd.loc or 'Not specified' }}
+                </p>
+                <a href="{{ pd.link }}" class="publisher-link" target="_blank"
+                  >Visit {{ pd.name }}</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

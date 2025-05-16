@@ -1,0 +1,45 @@
+{% extends "layout.html" %} {% block body %}
+
+<div class="container py-5">
+  <h2 class="text-center mb-4">Enter Verification Code</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %} {% for category, message in messages %}
+  <div
+    class="alert alert-{{ category }} alert-dismissible fade show"
+    role="alert"
+  >
+    {{ message }}
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
+
+  <form
+    method="POST"
+    action="/verifycode"
+    class="mx-auto"
+    style="max-width: 400px"
+  >
+    <div class="mb-3">
+      <label for="code" class="form-label"
+        >Enter the code sent to your email</label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="code"
+        name="code"
+        placeholder="6-digit code"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-success w-100">Verify Code</button>
+  </form>
+</div>
+
+{% endblock %}

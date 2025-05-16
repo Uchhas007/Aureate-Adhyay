@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+
+<style>
+  .wishlist-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    color: burlywood;
+  }
+  .wishlist-icon:hover {
+    color: black;
+  }
+  .product-style {
+    position: relative;
+  }
+</style>
+
+{% block body %} {% with messages = get_flashed_messages(with_categories=true)
+%} {% if messages %} {% for category, message in messages %}
+<div
+  class="alert alert-{{ category }} alert-dismissible fade show"
+  role="alert"
+  id="flash-message-{{ loop.index }}"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+<script>
+  // Auto-dismiss flash messages after 3 seconds (3000 ms)
+  setTimeout(function () {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach(function (alert) {
+      // Bootstrap 5 fade-out effect
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 500); // fully remove after fade
+    });
+  }, 3000);
+</script>
+
+<section id="popular-books" class="bookshelf py-5 my-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="section-header align-center">
+          <div class="title">
+            <span>Our Bestsellers</span>
+          </div>
+          <h2 class="section-title">Popular Books</h2>
+        </div>
+        <div class="product-list" data-aos="fade-up">
+          <div class="row">
+            {% if popular_books %} {% for book in popular_books %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+              <div class="product-item">
+                <figure class="product-style">
+                  <a
+                    href="/add_to_wishlist/book/{{ book.sno }}"
+                    class="wishlist-icon"
+                  >
+                    <i class="fas fa-heart"></i> Add to wishlist
+                  </a>
+
+                  <img
+                    src="{{ url_for('static', filename=book.image) }}"
+                    alt="{{ book.name }}"
+                    class="product-item img-fluid"
+                  />
+                  <button
+                    type="button"
+                    class="add-to-cart"
+                    onclick="window.location.href='/add_to_cart/book/{{ book.sno }}'"
+                  >
+                    Add to Cart
+                  </button>
+                </figure>
+                <figcaption>
+                  <h3>{{ book.name }}</h3>
+                  <span>{{ book.author }}</span>
+                  <div class="item-price">Tk {{ book.price }}</div>
+                  <div class="item-sales">Sales: {{ book.total_sells }}</div>
+                </figcaption>
+              </div>
+            </div>
+            {% else %}
+            <div class="col-md-12">
+              <p>No popular books available yet.</p>
+            </div>
+            {% endfor %} {% else %}
+            <div class="col-md-12">
+              <p>Error: Could not retrieve popular books.</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

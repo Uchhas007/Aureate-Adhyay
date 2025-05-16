@@ -1,0 +1,15 @@
+[project]
+name = "bookstore"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "flask>=3.1.0",
+    "flask-migrate>=4.1.0",
+    "flask-sqlalchemy>=3.1.1",
+    "mysql-connector-python>=9.3.0",
+    "mysqlclient>=2.2.7",
+    "pymysql>=1.1.1",
+    "sqlalchemy>=2.0.40",
+]

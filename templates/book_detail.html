@@ -1,0 +1,65 @@
+{% extends "layout.html" %} {% block body %} {% with messages =
+get_flashed_messages(with_categories=true) %} {% if messages %} {% for category,
+message in messages %}
+<div
+  class="alert alert-{{ category }} alert-dismissible fade show"
+  role="alert"
+  id="flash-message-{{ loop.index }}"
+>
+  {{ message }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+  ></button>
+</div>
+{% endfor %} {% endif %} {% endwith %}
+
+<script>
+  // Auto-dismiss flash messages after 3 seconds (3000 ms)
+  setTimeout(function () {
+    const alerts = document.querySelectorAll(".alert");
+    alerts.forEach(function (alert) {
+      // Bootstrap 5 fade-out effect
+      alert.classList.remove("show");
+      alert.classList.add("fade");
+      setTimeout(() => alert.remove(), 500); // fully remove after fade
+    });
+  }, 3000);
+</script>
+
+<section class="py-5 my-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-5">
+        <img
+          src="{{ url_for('static', filename=book.image) }}"
+          class="img-fluid"
+          alt="{{ book.name }}"
+        />
+      </div>
+      <div class="col-md-7">
+        <h2>{{ book.name }}</h2>
+        <h5 class="text-muted">by {{ book.author }}</h5>
+        <p class="mt-3"><strong>Category:</strong> {{ book.category }}</p>
+        <p><strong>Price:</strong> Tk {{ book.price }}</p>
+        <p><strong>Sold:</strong> {{ book.total_sells }} copies</p>
+
+        <hr />
+        <p><strong>Description:</strong></p>
+        <p>{{ book.description }}</p>
+        
+        <div class="mt-4">
+          <a href="/add_to_cart/book/{{ book.sno }}" class="btn btn-primary me-2">Add to Cart</a>
+          <a href="/add_to_wishlist/book/{{ book.sno }}" class="btn btn-outline-danger">Add to Wishlist</a>
+        </div>
+        
+        <a href="/featured" class="btn btn-outline-primary mt-3"
+          >← Back to Featured</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

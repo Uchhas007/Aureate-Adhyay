@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<section class="py-5 my-5">
+    <div class="container">
+        <h2 class="mb-4">Search Results for "{{ query }}"</h2>
+        <div class="row">
+            {% if books %}
+                {% for book in books %}
+                    <div class="col-md-3 mb-4">
+                        <div class="product-item">
+                            <figure class="product-style">
+                                <img src="{{ url_for('static', filename=book.image) }}" alt="{{ book.name }}" class="product-item">
+                                <button type="button" class="add-to-cart">Add to Cart</button>
+                            </figure>
+                            <figcaption>
+                                <h3>{{ book.name }}</h3>
+                                <span>{{ book.author }}</span>
+                                <div class="item-price">Tk {{ book.price }}</div>
+                            </figcaption>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No books found matching your search.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

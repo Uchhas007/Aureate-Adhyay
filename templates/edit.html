@@ -1,0 +1,92 @@
+{% extends "dashboard.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit {{ t }} - Item {{ sno }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .cancel-button {
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .cancel-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Edit {{ t }} - Item {{ sno }}</h2>
+
+        <form method="POST">
+            <div id="form-fields">
+                {% for column in items.__table__.columns %}
+                    {% if column.name != 'sno' and column.name != 'date' %} <!-- Skip 'sno' and 'date' fields -->
+                    <div class="form-group">
+                        <label for="{{ column.name }}">{{ column.name.replace('_', ' ').title() }}</label>
+                        <input type="text" name="{{ column.name }}" id="{{ column.name }}" 
+                               value="{{ getattr(items, column.name) }}" placeholder="Enter {{ column.name.replace('_', ' ').title() }}">
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <button type="submit">Save Changes</button>
+        </form>
+
+        <a href="/admin/{{ t.lower() }}">Back to List</a>
+    </div>
+
+    <script>
+        
+    </script>
+</body>
+</html>
+
+{% endblock %}
