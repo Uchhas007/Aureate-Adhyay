@@ -1,4 +1,4 @@
-# 📚 RUDZ Bookshop
+# 📚 Aureate Adhyay Bookshop ✨
 
 [⚠️ Suspicious Content]  
 **RUDZ Bookshop** is a full-featured **online book store** developed using **Flask (Python)**, **HTML**, **CSS**, and **MySQL**. It includes **CRUD** functionalities with **role-based access control** for managing books and viewing customer orders. Designed for both admins and staff, this system offers an efficient way to manage online book sales and inventory.
