@@ -38,8 +38,7 @@ This application enables admins to add, update, and delete books while viewing a
 - Python (Flask)
 
 ### Database:
-- MySQL  
-  - `dbname = 'bookstore'`
+- MySQL
 
 ---
 
